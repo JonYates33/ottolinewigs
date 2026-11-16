@@ -50,5 +50,6 @@
   ],
   "footer_disclosure": "Ottoline Wigs is an independent guide. Some links on this site may be affiliate links, which means we may earn a commission if you buy through them, at no extra cost to you. This never affects what we recommend.",
   "legal_name": "The Ottoline Wig Company",
-  "noindex": true
+  "noindex": false,
+  "indexnow_key": "e58d87fac5769f3f28febf2d35380112"
 }

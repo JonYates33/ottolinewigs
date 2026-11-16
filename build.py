@@ -256,7 +256,11 @@ def build_site():
         # Soft launch: the site works for anyone with the address, but search engines are asked to stay out.
         write("robots.txt", "User-agent: *\nDisallow: /\n")
     else:
-        write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {SITE['domain']}/sitemap.xml\n")
+        bots = ["Googlebot", "Bingbot", "GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "CCBot"]
+        named = "".join(f"User-agent: {b}\nAllow: /\n\n" for b in bots)  # search engines and AI assistants, welcomed by name
+        write("robots.txt", f"User-agent: *\nAllow: /\n\n{named}Sitemap: {SITE['domain']}/sitemap.xml\n")
+    if SITE.get("indexnow_key"):  # lets Bing and other IndexNow engines confirm we own the site
+        write(f"{SITE['indexnow_key']}.txt", SITE["indexnow_key"])
     not_found = ('<article class="guide"><h1>Page not found</h1><p class="lede">Sorry, there is nothing at this address.</p>'
                  f'<p><a class="button" href="/blogs/{BLOG}">See all guides</a></p><p><a href="/">Back to the home page</a></p></article>')
     write("404.html", layout(f"Page not found | {SITE['name']}", "Page not found.", "/404", not_found))
