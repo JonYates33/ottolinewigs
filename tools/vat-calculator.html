@@ -1,0 +1,28 @@
+<form class="tool" id="vat-calc" novalidate>
+  <label class="field" for="vat-price">Price shown, including VAT</label>
+  <div class="money"><span aria-hidden="true">£</span><input id="vat-price" type="number" inputmode="decimal" min="0" step="0.01" placeholder="240.00" autocomplete="off"></div>
+  <p><button class="button" type="submit">Work it out</button></p>
+</form>
+<section class="result" id="vat-result" aria-live="polite" hidden>
+  <div class="match"><p class="match-label">Price without VAT</p><p class="match-value" id="vat-net"></p></div>
+  <div class="match"><p class="match-label">You save</p><p class="match-value" id="vat-saving"></p></div>
+  <p class="small">VAT is 20% on top of the price before tax, so the saving is one sixth of the price you see. Retailers round to the nearest penny, so their figure may differ by a penny.</p>
+</section>
+<script>
+(function () {
+  var form = document.getElementById("vat-calc");
+  var input = document.getElementById("vat-price");
+  var result = document.getElementById("vat-result");
+  function money(n) { return "£" + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  function run() {
+    var gross = parseFloat(input.value);
+    if (!isFinite(gross) || gross <= 0) { result.hidden = true; return; }
+    var net = Math.round((gross / 1.2) * 100) / 100;
+    document.getElementById("vat-net").textContent = money(net);
+    document.getElementById("vat-saving").textContent = money(gross - net);
+    result.hidden = false;
+  }
+  form.addEventListener("submit", function (e) { e.preventDefault(); run(); });
+  input.addEventListener("input", run);
+})();
+</script>

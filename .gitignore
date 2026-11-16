@@ -1,0 +1,5 @@
+dist/
+preview.html
+shopify-export/
+__pycache__/
+*.zip

@@ -1,0 +1,148 @@
+<form class="tool" id="wig-quiz" novalidate>
+  <fieldset>
+    <legend>1. Why are you looking for a wig?</legend>
+    <label class="choice"><input type="radio" name="why" value="chemo"> Cancer treatment, and I expect to lose my hair</label>
+    <label class="choice"><input type="radio" name="why" value="alopecia"> Alopecia or another long-term condition</label>
+    <label class="choice"><input type="radio" name="why" value="thinning"> My hair is thinning, mostly on top</label>
+    <label class="choice"><input type="radio" name="why" value="choice"> Style or convenience</label>
+  </fieldset>
+  <fieldset>
+    <legend>2. How often will you wear it?</legend>
+    <label class="choice"><input type="radio" name="often" value="daily"> Every day</label>
+    <label class="choice"><input type="radio" name="often" value="some"> A few days a week</label>
+    <label class="choice"><input type="radio" name="often" value="rare"> Now and then</label>
+  </fieldset>
+  <fieldset>
+    <legend>3. How is your scalp?</legend>
+    <label class="choice"><input type="radio" name="scalp" value="tender"> Tender, sensitive, or I have little or no hair</label>
+    <label class="choice"><input type="radio" name="scalp" value="fine"> Fine, and I have hair underneath</label>
+  </fieldset>
+  <fieldset>
+    <legend>4. How much styling do you want to do?</legend>
+    <label class="choice"><input type="radio" name="styling" value="none"> None. I want to put it on and go</label>
+    <label class="choice"><input type="radio" name="styling" value="some"> A little, now and then</label>
+    <label class="choice"><input type="radio" name="styling" value="lots"> I enjoy styling my hair</label>
+  </fieldset>
+  <fieldset>
+    <legend>5. How do you like to wear your hair?</legend>
+    <label class="choice"><input type="radio" name="front" value="fringe"> With a fringe</label>
+    <label class="choice"><input type="radio" name="front" value="parting"> With a parting, hair falling forward</label>
+    <label class="choice"><input type="radio" name="front" value="back"> Off my face or swept back</label>
+  </fieldset>
+  <fieldset>
+    <legend>6. What's your budget for this wig?</legend>
+    <label class="choice"><input type="radio" name="budget" value="low"> Under £150</label>
+    <label class="choice"><input type="radio" name="budget" value="mid"> £150 to £350</label>
+    <label class="choice"><input type="radio" name="budget" value="high"> Over £350</label>
+  </fieldset>
+  <p class="tool-error" id="quiz-error" role="alert" hidden>Please answer every question so we can match you properly.</p>
+  <p><button class="button" type="submit">Show my match</button></p>
+</form>
+<section class="result" id="quiz-result" tabindex="-1" hidden></section>
+<script>
+(function () {
+  var GUIDE_BASE = "/blogs/guides/";
+  var LIVE = /*LIVE_HANDLES*/[];
+  var form = document.getElementById("wig-quiz");
+  var out = document.getElementById("quiz-result");
+  var err = document.getElementById("quiz-error");
+
+  function link(handle, text) {
+    if (LIVE.indexOf(handle) === -1) return text;
+    return '<a href="' + GUIDE_BASE + handle + '">' + text + "</a>";
+  }
+  function pick(name) {
+    var el = form.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : null;
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var a = {};
+    var names = ["why", "often", "scalp", "styling", "front", "budget"];
+    for (var i = 0; i < names.length; i++) {
+      a[names[i]] = pick(names[i]);
+      if (!a[names[i]]) { err.hidden = false; return; }
+    }
+    err.hidden = true;
+
+    var medical = a.why === "chemo" || a.why === "alopecia";
+    var gentle = a.scalp === "tender" || medical;
+
+    // Fibre
+    var fibre, fibreWhy;
+    if (a.why === "chemo") {
+      fibre = "Synthetic";
+      fibreWhy = "It's ready to wear after a wash, which matters on tired days, and it's what the NHS usually provides.";
+    } else if (a.styling === "lots" && a.budget === "high") {
+      fibre = "Human hair";
+      fibreWhy = "You can blow-dry and curl it like your own. It needs styling after every wash, so it suits someone who enjoys that.";
+    } else if (a.styling === "none") {
+      fibre = "Synthetic";
+      fibreWhy = "The style is set into the fibre, so you wash it, let it dry and wear it.";
+    } else {
+      fibre = "Heat-friendly synthetic";
+      fibreWhy = "You can smooth or wave it with tools on a low setting. It needs a little more looking after than ordinary synthetic.";
+    }
+
+    // Cap
+    var cap, capWhy;
+    if (gentle && a.budget !== "low") {
+      cap = a.front === "back" ? "Hand-tied cap with a lace front" : "Hand-tied cap, or a double monofilament top";
+      capWhy = "These are the softest against a bare or tender scalp, with no rough wefts.";
+    } else if (gentle) {
+      cap = "A lightweight wefted cap, worn with a soft cotton liner";
+      capWhy = "Wefted caps are the airiest and the most affordable. The liner adds the softness a tender scalp needs.";
+    } else if (a.front === "back") {
+      cap = a.budget === "low" ? "A lace front, even on a basic cap" : "Lace front with a monofilament top";
+      capWhy = "A lace front gives a soft, believable hairline, which you need when your hair is off your face.";
+    } else if (a.front === "parting") {
+      cap = a.budget === "low" ? "A monofilament parting" : "Monofilament top";
+      capWhy = "The fine mesh shows what looks like scalp, so your parting looks like hair growing from skin.";
+    } else {
+      cap = a.budget === "low" ? "Wefted (basic) cap" : "Wefted cap, or a monofilament crown";
+      capWhy = "A fringe hides the front edge of the wig, so you don't need to pay for a lace front.";
+    }
+
+    // Extras
+    var tips = [];
+    if (a.why === "thinning") {
+      tips.push("<strong>A topper may be all you need.</strong> If the hair at your sides and back is still strong, a clip-in topper covers thinning on top and is lighter than a wig. If your hair is fine all over, a lightweight wig is kinder.");
+    }
+    if (a.why === "chemo") {
+      tips.push("<strong>Choose before your hair goes if you can,</strong> and pick a cap that tightens, because you'll need a smaller fit later. " + link("wigs-during-chemotherapy", "Read the chemotherapy guide") + ".");
+    }
+    if (a.why === "alopecia") {
+      tips.push("<strong>Grip matters without hair underneath.</strong> A grip band or wig tape will help. " + link("wigs-for-alopecia", "Read the alopecia guide") + ".");
+    }
+    if (medical) {
+      tips.push("<strong>Ask about an NHS wig first.</strong> They're free in Scotland, Wales and Northern Ireland, and many women in England qualify for a free one. " + link("nhs-wigs-who-qualifies-and-how-to-get-one", "See who qualifies") + ".");
+    }
+    if (a.why !== "choice") {
+      tips.push("<strong>You may not have to pay VAT.</strong> If your hair loss has a medical cause, you can often buy without it, but you must claim when you buy. " + link("vat-relief-on-wigs", "How VAT relief works") + ".");
+    }
+    if (a.often === "daily") {
+      tips.push("<strong>Plan for two.</strong> A wig worn every day lasts months, not years. Two worn in turn last longer, and you're never stuck on wash day.");
+    }
+    if (a.budget === "low" && !medical) {
+      tips.push("<strong>Spend on the cap before the fibre.</strong> A synthetic wig with a good cap often looks better than a dearer fibre on a basic one.");
+    }
+    tips.push("<strong>Check your size before you order.</strong> " + link("how-to-measure-your-head-for-a-wig", "Measuring takes two minutes") + ".");
+
+    var html = "<h2>Your match</h2>" +
+      '<div class="match"><p class="match-label">Fibre</p><p class="match-value">' + fibre + "</p><p>" + fibreWhy + " " +
+      link("synthetic-vs-human-hair-vs-heat-friendly-wigs", "More on fibres") + ".</p></div>" +
+      '<div class="match"><p class="match-label">Cap</p><p class="match-value">' + cap + "</p><p>" + capWhy + " " +
+      link("wig-cap-constructions-explained", "More on caps") + ".</p></div>" +
+      "<h3>Worth knowing</h3><ul>";
+    for (var t = 0; t < tips.length; t++) html += "<li>" + tips[t] + "</li>";
+    html += "</ul><p>Next: " + link("your-first-wig-beginners-guide", "the beginner's guide") + " puts it all together, and " +
+      link("buying-a-wig-online-vs-in-a-shop", "online vs in a shop") + " covers where to buy.</p>" +
+      '<p class="small">This is a starting point based on general guidance, not personal or medical advice.</p>';
+    out.innerHTML = html;
+    out.hidden = false;
+    out.focus();
+    out.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+})();
+</script>

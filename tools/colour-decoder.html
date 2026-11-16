@@ -1,0 +1,91 @@
+<form class="tool" id="cd-form" novalidate>
+  <label class="field" for="cd-code">Colour code or shade name</label>
+  <div class="money" style="max-width:22rem"><input id="cd-code" type="text" placeholder="RL12/22SS" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
+  <p><button class="button" type="submit">Explain it</button></p>
+  <p class="small">Try: RL12/22SS, 12FS8, 14/26S10, R8/26H, 56/60, Stone Grey Rooted</p>
+</form>
+<section class="result" id="cd-result" aria-live="polite" hidden>
+  <ul id="cd-lines"></ul>
+  <p class="small">Numbers follow a scale most brands share, but it is not an official standard and every brand mixes its own blends. Use this to narrow the choice, then look at the colour on the actual wig, in daylight if you can.</p>
+</section>
+<script>
+(function () {
+  var NAMES = {"1":"jet black","1B":"black","2":"darkest brown","4":"dark brown","6":"medium brown","8":"light brown","10":"lightest brown","12":"light golden brown","14":"dark ash blonde","16":"ash blonde","18":"light ash blonde","22":"champagne blonde","24":"golden blonde","27":"strawberry blonde","28":"copper blonde","30":"medium auburn","33":"dark auburn","130":"copper red","613":"pale blonde"};
+  var GREYS = [34,36,38,39,44,48,51,54,56,59,60,92];
+  function family(n) {
+    if (n === 1) return "black";
+    if (n >= 2 && n <= 12) return "a brown";
+    if (n >= 14 && n <= 26) return "a blonde";
+    if (n >= 27 && n <= 33) return "a natural red or auburn";
+    if (n >= 130 && n <= 134) return "a vivid red";
+    if (GREYS.indexOf(n) > -1 || (n >= 34 && n <= 60)) return "a grey";
+    if (n === 101 || n === 102 || n === 104 || n === 613) return "a platinum or palest blonde";
+    return null;
+  }
+  function shade(tok) {
+    var n = parseInt(tok, 10), f = family(n), name = NAMES[tok] || NAMES[String(n)];
+    if (name) return "<strong>" + tok + "</strong> is " + name + (f && name.indexOf(f.replace(/^a /, "")) < 0 ? " (" + f + ")" : "") + ".";
+    if (f) return "<strong>" + tok + "</strong> is " + f + ".";
+    return "<strong>" + tok + "</strong> isn't on the common number scale. It is this brand's own shade, so ask the retailer or look at the swatch.";
+  }
+  var SUFFIX = {
+    "SS": "<strong>SS</strong> means a shaded, darker root. Raquel Welch and Gabor use it.",
+    "C": "<strong>C</strong> on Raquel Welch codes means chunkier, more defined highlights.",
+    "H": "<strong>H</strong> on Estetica codes means highlighted.",
+    "BT": "<strong>BT</strong> on Estetica codes means the ends are tipped with a lighter shade.",
+    "FS": "<strong>FS</strong> is Jon Renau's “Fashion Syrup”: bolder, chunkier highlights.",
+    "S": "<strong>S</strong> on Jon Renau codes means a rooted shade."
+  };
+  function esc(s) { return s.replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function decodeName(raw) {
+    var out = [], t = " " + raw.toLowerCase().replace(/[-_]/g, " ") + " ";
+    if (/ mix /.test(t)) out.push("<strong>Mix</strong> means several tones blended through the hair. Ellen Wille names shades this way.");
+    if (/ rooted /.test(t)) out.push("<strong>Rooted</strong> means the roots are darker than the lengths, like hair that has grown.");
+    if (/ shaded /.test(t)) out.push("<strong>Shaded</strong> means a darker root. Raquel Welch uses this word for rooted shades.");
+    if (/ glazed /.test(t)) out.push("<strong>Glazed</strong> means highlighted. Raquel Welch uses this word.");
+    if (/ lr /.test(t)) out.push("<strong>LR</strong> means long rooted: a deeper band of darker root. Rene of Paris uses it.");
+    if (/ r /.test(t)) out.push("<strong>R</strong> after a Noriko or Rene of Paris name means the shade is rooted.");
+    if (/ f /.test(t)) out.push("<strong>F</strong> after a Noriko name means frosted.");
+    if (/ (grey|gray|silver|pearl|snow|salt|pepper|smoke|platinum) /.test(t)) out.push("The name points to a grey, silver or white shade.");
+    if (!out.length) out.push("This is a descriptive shade name. Brands such as Ellen Wille, Noriko, Rene of Paris and Amore use names in place of numbers, so the swatch is the only real guide.");
+    return out;
+  }
+  function decode(raw) {
+    var code = raw.toUpperCase().replace(/\s+/g, "");
+    if (!/\d/.test(code)) return decodeName(raw);
+    var out = [], m = code.match(/^(RL|GL|GF|FS|R)(?=\d)/);
+    if (m) {
+      var p = m[1];
+      if (p === "RL") out.push("<strong>RL</strong> is a Raquel Welch prefix. It marks the brand's blend and doesn't change the colour, so read the numbers.");
+      else if (p === "R") out.push("<strong>R</strong> at the front depends on the brand. On Estetica it means rooted. On Raquel Welch it is just part of the code.");
+      else if (p === "FS") out.push(SUFFIX.FS);
+      else out.push("<strong>" + p + "</strong> is a Gabor prefix. It doesn't tell you the colour, so read the numbers.");
+      code = code.slice(p.length);
+    }
+    var parts = code.split("/");
+    if (parts.length > 1) out.push("The <strong>slash</strong> means the shades either side are blended together.");
+    parts.forEach(function (part) {
+      var jr = part.match(/^(\d+B?)(FS|S)(\d+)$/), g = part.match(/^(\d+B?)([A-Z]*)$/);
+      if (jr) {
+        out.push(shade(jr[1])); out.push(SUFFIX[jr[2]]);
+        out.push("The number after the letters is the root colour. " + shade(jr[3]));
+      } else if (g) {
+        out.push(shade(g[1]));
+        if (g[2]) out.push(SUFFIX[g[2]] || "We don't know what <strong>" + esc(g[2]) + "</strong> means on this code. Ask the retailer.");
+      } else if (part) {
+        out.push("We can't read <strong>" + esc(part) + "</strong>. Ask the retailer what it means.");
+      }
+    });
+    return out;
+  }
+  document.getElementById("cd-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var v = document.getElementById("cd-code").value.trim(), box = document.getElementById("cd-result");
+    if (!v) { box.hidden = true; return; }
+    document.getElementById("cd-lines").innerHTML = decode(v).map(function (l) { return "<li>" + l + "</li>"; }).join("");
+    box.hidden = false;
+  });
+  if (typeof module !== "undefined") module.exports = decode;
+  window.__cdDecode = decode;
+})();
+</script>

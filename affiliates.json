@@ -1,0 +1,74 @@
+{
+  "_how_to_use": "One entry per affiliate link. Paste the tracking URL the network gives you into 'url'. In a guide, write [[aff:the-key|the words to link]]. Leave 'url' empty and the words show with no link, so you can place links before you are approved.",
+  "example-retailer": {
+    "name": "Example Wig Shop",
+    "network": "Awin",
+    "url": ""
+  },
+  "simplywigs-winner": {
+    "name": "Simply Wigs: Winner by Raquel Welch",
+    "network": "",
+    "url": "",
+    "product_page": "https://www.simplywigs.co.uk/winner-petite-wig-raquel-welch.html"
+  },
+  "simplywigs-jackson": {
+    "name": "Simply Wigs: Jackson by Noriko",
+    "network": "",
+    "url": "",
+    "product_page": "https://www.simplywigs.co.uk/jackson-wig-noriko-rene-of-paris.html"
+  },
+  "simplywigs-kyu": {
+    "name": "Simply Wigs: Kyu by Sentoo Premium",
+    "network": "",
+    "url": "",
+    "product_page": "https://www.simplywigs.co.uk/kyu-petite-wig-sentoo-premium-collection-clove.html"
+  },
+  "simplywigs-flip-mono": {
+    "name": "Simply Wigs: Flip Mono by Ellen Wille",
+    "network": "",
+    "url": "",
+    "product_page": "https://www.simplywigs.co.uk/flip-mono-wig-ellen-wille-hairpower-collection.html"
+  },
+  "simplywigs-balance": {
+    "name": "Simply Wigs: Balance Petite by Natural Image",
+    "network": "",
+    "url": "",
+    "product_page": "https://www.simplywigs.co.uk/balance-wig-natural-image-g12-pecan-mist.html"
+  },
+  "josephs-chloe": {
+    "name": "Joseph's Wigs: Chloe by Dimples",
+    "network": "",
+    "url": "",
+    "product_page": "https://www.josephs-wigs.com/chloe-wig-dimples.html"
+  },
+  "simplywigs-sprite": {
+    "name": "Simply Wigs: Sprite Petite by Natural Image",
+    "network": "",
+    "url": "",
+    "product_page": "https://www.simplywigs.co.uk/natural-image-sugared-silver.html"
+  },
+  "simplywigs-tango": {
+    "name": "Simply Wigs: Tango by Raquel Welch",
+    "network": "",
+    "url": "",
+    "product_page": "https://www.simplywigs.co.uk/tango-wig-raquel-welch-uk-collection.html"
+  },
+  "simplywigs-attract": {
+    "name": "Simply Wigs: Attract Petite by Natural Image",
+    "network": "",
+    "url": "",
+    "product_page": "https://www.simplywigs.co.uk/attract-petite-wig-natural-image-onyx-glow.html"
+  },
+  "simplywigs-edge-factor": {
+    "name": "Simply Wigs: Edge Factor by Gabor",
+    "network": "",
+    "url": "",
+    "product_page": "https://www.simplywigs.co.uk/edge-factor-wig-gabor-designer-series.html"
+  },
+  "simplywigs-joy": {
+    "name": "Simply Wigs: Joy by Gabor Essentials",
+    "network": "",
+    "url": "",
+    "product_page": "https://www.simplywigs.co.uk/joy-wig-gabor-essentials-series.html"
+  }
+}

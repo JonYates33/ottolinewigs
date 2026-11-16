@@ -1,0 +1,54 @@
+{
+  "name": "Ottoline Wigs",
+  "tagline": "Clear, honest wig advice for the UK",
+  "domain": "https://ottolinewigs.co.uk",
+  "description": "Independent UK guides for women choosing, buying, wearing and caring for wigs, including help with NHS wigs and VAT relief.",
+  "author": "The Ottoline Wigs team",
+  "contact_email": "hello@ottolinewigs.co.uk",
+  "blog_handle": "guides",
+  "categories": [
+    {
+      "id": "starting-out",
+      "title": "Starting out",
+      "intro": "New to wigs? Begin here."
+    },
+    {
+      "id": "colour-and-style",
+      "title": "Colour and style",
+      "intro": "Finding a shade and shape that suits you."
+    },
+    {
+      "id": "hair-loss",
+      "title": "Hair loss",
+      "intro": "Practical help for medical hair loss, NHS wigs and VAT relief."
+    },
+    {
+      "id": "wearing",
+      "title": "Wearing your wig",
+      "intro": "Fit, comfort and looking natural."
+    },
+    {
+      "id": "care",
+      "title": "Care",
+      "intro": "Washing, storing and making a wig last."
+    },
+    {
+      "id": "finding-yours",
+      "title": "Finding your match",
+      "intro": "Guides for particular hair types and stages of life."
+    },
+    {
+      "id": "brands",
+      "title": "Brands",
+      "intro": "How the main brands compare."
+    },
+    {
+      "id": "buying-guides",
+      "title": "Buying guides",
+      "intro": "Our picks, with UK prices and where to buy."
+    }
+  ],
+  "footer_disclosure": "Ottoline Wigs is an independent guide. Some links on this site may be affiliate links, which means we may earn a commission if you buy through them, at no extra cost to you. This never affects what we recommend.",
+  "legal_name": "The Ottoline Wig Company",
+  "noindex": true
+}
