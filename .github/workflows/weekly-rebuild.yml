@@ -1,0 +1,21 @@
+name: Weekly rebuild
+# Scheduled guides only appear when the site rebuilds. This nudges Cloudflare
+# to rebuild every Monday morning by committing a small timestamp file.
+on:
+  schedule:
+    - cron: "0 6 * * 1"   # Mondays 06:00 UTC
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  nudge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          date -u +"%Y-%m-%d %H:%M UTC" > .last-rebuild
+          git config user.name "weekly-rebuild"
+          git config user.email "actions@users.noreply.github.com"
+          git add .last-rebuild
+          git commit -m "Weekly rebuild" || exit 0
+          git push
